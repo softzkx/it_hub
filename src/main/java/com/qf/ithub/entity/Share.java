@@ -92,6 +92,9 @@ public class Share {
 
     private Integer catid;
 
+    @Column(name = "download_pass")
+    private String downloadPass;
+
     /**
      * 概要信息
      */
@@ -389,6 +392,20 @@ public class Share {
      */
     public void setCatid(Integer catid) {
         this.catid = catid;
+    }
+
+    /**
+     * @return download_pass
+     */
+    public String getDownloadPass() {
+        return downloadPass;
+    }
+
+    /**
+     * @param downloadPass
+     */
+    public void setDownloadPass(String downloadPass) {
+        this.downloadPass = downloadPass;
     }
 
     /**

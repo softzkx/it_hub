@@ -22,6 +22,7 @@
     <result column="is_top" jdbcType="BIT" property="isTop" />
     <result column="is_hot" jdbcType="BIT" property="isHot" />
     <result column="catid" jdbcType="INTEGER" property="catid" />
+    <result column="download_pass" jdbcType="VARCHAR" property="downloadPass" />
     <result column="summary" jdbcType="LONGVARCHAR" property="summary" />
   </resultMap>
 </mapper>

@@ -3,10 +3,7 @@ package com.qf.ithub.controller;
 import com.qf.ithub.common.dto.ResultDTO;
 import com.qf.ithub.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Copyright (C), 2017-2020, 扩新工作室
@@ -37,5 +34,21 @@ public class ShareController {
     @GetMapping("/gethots")
     public ResultDTO getHots(){
         return shareService.getHots();
+    }
+
+    /***
+     * 获得详情页上面 某个分享的图片的集合
+     */
+    @GetMapping("/getimages/{id}")
+    public ResultDTO getImagesById(@PathVariable("id") Integer id){
+        return shareService.getImagesById(id);
+    }
+
+    /**
+     * 根据ｓｈａｒｅｉｄ　获得分享的详情
+     */
+    @GetMapping("/getdetail/{id}")
+    public ResultDTO getdetailById(@PathVariable("id") Integer id){
+        return shareService.getdetailById(id);
     }
 }
