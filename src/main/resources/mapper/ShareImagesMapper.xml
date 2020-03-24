@@ -5,7 +5,7 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="shareid" jdbcType="INTEGER" property="shareid" />
   </resultMap>

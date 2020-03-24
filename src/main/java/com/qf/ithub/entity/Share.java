@@ -1,7 +1,5 @@
 package com.qf.ithub.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 import javax.persistence.*;
 
@@ -28,14 +26,12 @@ public class Share {
      * 创建时间
      */
     @Column(name = "create_time")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @Column(name = "update_time")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date updateTime;
 
     /**
@@ -53,11 +49,6 @@ public class Share {
      * 封面
      */
     private String cover;
-
-    /**
-     * 概要信息
-     */
-    private String summary;
 
     /**
      * 价格（需要的积分）
@@ -100,6 +91,11 @@ public class Share {
     private Boolean isHot;
 
     private Integer catid;
+
+    /**
+     * 概要信息
+     */
+    private String summary;
 
     /**
      * 获取id
@@ -243,24 +239,6 @@ public class Share {
      */
     public void setCover(String cover) {
         this.cover = cover;
-    }
-
-    /**
-     * 获取概要信息
-     *
-     * @return summary - 概要信息
-     */
-    public String getSummary() {
-        return summary;
-    }
-
-    /**
-     * 设置概要信息
-     *
-     * @param summary 概要信息
-     */
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     /**
@@ -411,5 +389,23 @@ public class Share {
      */
     public void setCatid(Integer catid) {
         this.catid = catid;
+    }
+
+    /**
+     * 获取概要信息
+     *
+     * @return summary - 概要信息
+     */
+    public String getSummary() {
+        return summary;
+    }
+
+    /**
+     * 设置概要信息
+     *
+     * @param summary 概要信息
+     */
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

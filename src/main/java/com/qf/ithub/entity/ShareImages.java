@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Table(name = "share_images")
 public class ShareImages {
+    @Id
     private Integer id;
 
     private String image;
