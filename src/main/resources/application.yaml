@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/it_hub?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    hikari:
+      driver-class-name: com.mysql.jdbc.Driver
+      username: root
+      password: root
+  application:
+    name: it_hub
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+  thymeleaf:
+    cache: true
+jwt:
+  secret: "ashdjakhsdhaslkdhalsjdlasjdlaksjdlkasjdlasjdlkasdjlasjdaslkdjasl"
+  # \u6709\u6548\u671F\uFF0C\u5355\u4F4D\u79D2\uFF0C\u9ED8\u8BA42\u5468
+  expire-time-in-second: 600
+wx:
+  appid: wx049dff51afa505a9
+  secret: f4a7020a571b25cd84dc73e461b78957
+
+server:
+  port: 7000
+
+oss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  url: http://zoukxoss01.oss-cn-beijing.aliyuncs.com/
+  accessKeyId: LTAI4FmVd9pcvLSBhafXsrUv
+  accessKeySecret: 0i1cQpdrQvNSmk6Ou5cqWMT3TAz25z
+  bucketName: zoukxoss01
+
+logging:
+  level:
+    com.qf.ithub.mapper: debug
+
