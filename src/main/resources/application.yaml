@@ -34,3 +34,6 @@ logging:
   level:
     com.qf.ithub.mapper: debug
 
+sms:
+  accessKeyId: LTAIXclHz8jUYLFI
+
