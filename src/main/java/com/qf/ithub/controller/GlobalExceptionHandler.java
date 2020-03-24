@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * Author: zoukx
  * Date: 2020/3/10 9:03
  * FileName: GlobalExceptionHandler
- * Description: ${DESCRIPTION}
+ * Description: ${DESCRIPTION}git
  */
 @RestControllerAdvice
 @Slf4j

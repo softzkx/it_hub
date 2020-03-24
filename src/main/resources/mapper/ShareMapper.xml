@@ -20,5 +20,8 @@
     <result column="show_flag" jdbcType="BIT" property="showFlag" />
     <result column="audit_status" jdbcType="VARCHAR" property="auditStatus" />
     <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="is_top" jdbcType="BIT" property="isTop" />
+    <result column="is_hot" jdbcType="BIT" property="isHot" />
+    <result column="catid" jdbcType="INTEGER" property="catid" />
   </resultMap>
 </mapper>

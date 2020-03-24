@@ -1,5 +1,7 @@
 package com.qf.ithub.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -26,12 +28,14 @@ public class Share {
      * 创建时间
      */
     @Column(name = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date createTime;
 
     /**
      * 修改时间
      */
     @Column(name = "update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date updateTime;
 
     /**
@@ -88,6 +92,14 @@ public class Share {
      * 审核不通过原因
      */
     private String reason;
+
+    @Column(name = "is_top")
+    private Boolean isTop;
+
+    @Column(name = "is_hot")
+    private Boolean isHot;
+
+    private Integer catid;
 
     /**
      * 获取id
@@ -357,5 +369,47 @@ public class Share {
      */
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    /**
+     * @return is_top
+     */
+    public Boolean getIsTop() {
+        return isTop;
+    }
+
+    /**
+     * @param isTop
+     */
+    public void setIsTop(Boolean isTop) {
+        this.isTop = isTop;
+    }
+
+    /**
+     * @return is_hot
+     */
+    public Boolean getIsHot() {
+        return isHot;
+    }
+
+    /**
+     * @param isHot
+     */
+    public void setIsHot(Boolean isHot) {
+        this.isHot = isHot;
+    }
+
+    /**
+     * @return catid
+     */
+    public Integer getCatid() {
+        return catid;
+    }
+
+    /**
+     * @param catid
+     */
+    public void setCatid(Integer catid) {
+        this.catid = catid;
     }
 }
