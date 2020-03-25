@@ -1,9 +1,12 @@
 package com.qf.ithub.controller;
 
+import com.qf.ithub.common.aspect.annotation.CheckLogin;
 import com.qf.ithub.common.dto.ResultDTO;
 import com.qf.ithub.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Copyright (C), 2017-2020, 扩新工作室
@@ -50,5 +53,15 @@ public class ShareController {
     @GetMapping("/getdetail/{id}")
     public ResultDTO getdetailById(@PathVariable("id") Integer id){
         return shareService.getdetailById(id);
+    }
+
+    // 用户兑换指定的资源
+    @PostMapping("/exchangeshare")
+    @CheckLogin
+    public ResultDTO exchangeshare(Integer shareid, HttpServletRequest request){
+        // 1 获得userid
+        Integer userid = (Integer) request.getAttribute("userid");
+
+        return shareService.exchangeShare(userid,shareid);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -84,8 +83,10 @@ public class UserController {
     /**
      *  根据userid 和 shareid 查询当前用户是否购买过这个资源
      */
-    @PostMapping("/getmus")
+    @GetMapping("/getmus")
     public ResultDTO getMidUserShare(@RequestParam("userid") Integer userid, @RequestParam("shareid") Integer shareid){
         return midUserShareService.getMidUserShare(userid,shareid);
     }
+
+
 }
