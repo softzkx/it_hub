@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginReqDTO {
-    String avatarUrl;
-    String code;
-    String wxNickname;
+public class LoginByPhoneReqDTO {
+    String phonenum;
+    String checkcode;
 }

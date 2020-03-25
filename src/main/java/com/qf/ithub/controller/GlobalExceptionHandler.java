@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResultDTO> ExcptionHandler(Exception ex){
+        ex.printStackTrace();
         ResponseEntity responseBody = new ResponseEntity(
                 ResultDTO.builder()
                         .message("未知错误 请联系管理员")

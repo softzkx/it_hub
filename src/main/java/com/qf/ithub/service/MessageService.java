@@ -64,7 +64,7 @@ public class MessageService {
         //hint 此处可能会抛出异常，注意catch
         //Thread.sleep(5000);
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        System.out.println(sendSmsResponse);
+        System.out.println(sendSmsResponse.getMessage());
         if(sendSmsResponse.getCode().equals("OK")) {
             return ResultDTO.builder()
                     .data(code)
