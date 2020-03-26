@@ -40,3 +40,6 @@ logging:
 sms:
   accessKeyId: LTAIXclHz8jUYLFI
 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+

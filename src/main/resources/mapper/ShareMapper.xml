@@ -25,4 +25,11 @@
     <result column="download_pass" jdbcType="VARCHAR" property="downloadPass" />
     <result column="summary" jdbcType="LONGVARCHAR" property="summary" />
   </resultMap>
+
+  <select id="getExchangeShares" resultMap="BaseResultMap" parameterType="map">
+    select * from  share a
+    left join mid_user_share b
+    on a.id=b.share_id
+    where a.user_id=#{userid}
+  </select>
 </mapper>

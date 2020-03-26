@@ -60,8 +60,45 @@ public class ShareController {
     @CheckLogin
     public ResultDTO exchangeshare(Integer shareid, HttpServletRequest request){
         // 1 获得userid
+        System.out.println(shareid);
         Integer userid = (Integer) request.getAttribute("userid");
 
         return shareService.exchangeShare(userid,shareid);
+    }
+
+    /**
+     * 获得 所有的资源种类
+     */
+    @GetMapping("/getcats")
+    public ResultDTO getCats(){
+       return shareService.getCats();
+    }
+
+    /**
+     * 根据种类id 获得资源 和 分页信息获得资源的集合
+     */
+    @GetMapping("/bycatid")
+    public ResultDTO getSharesByCatid(
+            @RequestParam(name = "catid") Integer catid,
+            @RequestParam(name="pageno",defaultValue = "1") Integer pageno
+    ){
+        return shareService.getSharesByCatid(catid,pageno);
+    }
+
+    /**
+     *  根据用户id 获得用户的兑换资源集合 或者 共享资源的集合
+     */
+    @GetMapping("/getsharesbytype")
+    @CheckLogin
+    public ResultDTO getSharesbyType(HttpServletRequest request,
+                                    @RequestParam("isexchange") Boolean isExchange,
+                                     @RequestParam(name="pageno",defaultValue = "1")Integer pageno){
+        Integer userid = (Integer) request.getAttribute("userid");
+        if(isExchange){
+            // 返回我兑换过的资源集合
+            return  shareService.getExchangeShares(userid,pageno);
+        }
+        // 返回我up 的资源
+        return  shareService.getUpShares(userid,pageno);
     }
 }

@@ -1,16 +1,11 @@
 package com.qf.ithub.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qf.ithub.common.dto.ResultDTO;
 import com.qf.ithub.common.exception.AppException;
-import com.qf.ithub.entity.MidUserShare;
-import com.qf.ithub.entity.Share;
-import com.qf.ithub.entity.ShareImages;
-import com.qf.ithub.entity.User;
-import com.qf.ithub.mapper.MidUserShareMapper;
-import com.qf.ithub.mapper.ShareImagesMapper;
-import com.qf.ithub.mapper.ShareMapper;
-import com.qf.ithub.mapper.UserMapper;
+import com.qf.ithub.entity.*;
+import com.qf.ithub.mapper.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
@@ -38,6 +33,8 @@ public class ShareService {
     private MidUserShareMapper midUserShareMapper;
     @Resource
     private ShareImagesMapper shareImagesMapper;
+    @Resource
+    private ShareCategoryMapper shareCategoryMapper;
 
     /**
      * 获得首页轮播的商品前5条
@@ -175,5 +172,68 @@ public class ShareService {
         return ResultDTO.builder().status(HttpStatus.OK.value()).message("兑换成功").build();
 
 
+    }
+
+    /**
+     * 获得 所有的资源种类
+     */
+    public ResultDTO getCats() {
+
+        List<ShareCategory> shareCategories = shareCategoryMapper.selectAll();
+        return ResultDTO.builder()
+                .status(HttpStatus.OK.value())
+                .data(shareCategories)
+                .build();
+    }
+
+    /**
+     * 根据种类id 获得资源 和 分页信息获得资源的集合
+     */
+    public ResultDTO getSharesByCatid(Integer catid, Integer pageno) {
+        // 1 如果catid = -1 查询全部 否则 按照 catid 查询
+        PageHelper.startPage(pageno,10);
+        List<Share> shares = null;
+        Example example = new Example(Share.class);
+        if(catid!=-1){
+            example.createCriteria().andEqualTo("catid",catid);
+
+        }
+        example.setOrderByClause("create_time desc");
+        shares = shareMapper.selectByExample(example);
+        PageInfo<Share> pageInfo = new PageInfo<>(shares);
+        return ResultDTO.builder()
+                .status(HttpStatus.OK.value())
+                .data(pageInfo).build();
+    }
+
+    /**
+     * 获得指定用户兑换过的资源
+     */
+    public ResultDTO getExchangeShares(Integer userid, Integer pageno){
+        PageHelper.startPage(pageno,10);
+        List<Share> exchangeShares = shareMapper.getExchangeShares(userid);
+        PageInfo<Share> of = PageInfo.of(exchangeShares);
+        return ResultDTO.builder()
+                .data(of)
+                .status(HttpStatus.OK.value())
+                .build();
+    }
+
+    /**
+     * 获得指定用户贡献的资源
+     */
+    public ResultDTO getUpShares(Integer userid, Integer pageno) {
+
+        PageHelper.startPage(pageno,10);
+        Example example = new Example(Share.class);
+        example.createCriteria().andEqualTo("userId",userid)
+                .andEqualTo("auditStatus","PASS");
+        example.setOrderByClause("update_time desc");
+        List<Share> shares = shareMapper.selectByExample(example);
+        PageInfo<Share> pageInfo = PageInfo.of(shares);
+        return ResultDTO.builder()
+                .data(pageInfo)
+                .status(HttpStatus.OK.value())
+                .build();
     }
 }
