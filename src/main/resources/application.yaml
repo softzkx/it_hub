@@ -18,7 +18,7 @@ spring:
 jwt:
   secret: "ashdjakhsdhaslkdhalsjdlasjdlaksjdlkasjdlasjdlkasdjlasjdaslkdjasl"
   # \u6709\u6548\u671F\uFF0C\u5355\u4F4D\u79D2\uFF0C\u9ED8\u8BA42\u5468
-  expire-time-in-second: 3600
+  expire-time-in-second: 1209600
 wx:
   appid: wx049dff51afa505a9
   secret: f4a7020a571b25cd84dc73e461b78957

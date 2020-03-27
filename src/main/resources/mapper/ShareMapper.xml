@@ -27,9 +27,7 @@
   </resultMap>
 
   <select id="getExchangeShares" resultMap="BaseResultMap" parameterType="map">
-    select * from  share a
-    left join mid_user_share b
-    on a.id=b.share_id
+    select * from mid_user_share a left join share b on b.id=a.share_id
     where a.user_id=#{userid}
   </select>
 </mapper>

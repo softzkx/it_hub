@@ -212,7 +212,7 @@ public class ShareService {
     public ResultDTO getExchangeShares(Integer userid, Integer pageno){
         PageHelper.startPage(pageno,10);
         List<Share> exchangeShares = shareMapper.getExchangeShares(userid);
-        PageInfo<Share> of = PageInfo.of(exchangeShares);
+        PageInfo<Share> of = new PageInfo<>(exchangeShares);
         return ResultDTO.builder()
                 .data(of)
                 .status(HttpStatus.OK.value())
@@ -230,9 +230,9 @@ public class ShareService {
                 .andEqualTo("auditStatus","PASS");
         example.setOrderByClause("update_time desc");
         List<Share> shares = shareMapper.selectByExample(example);
-        PageInfo<Share> pageInfo = PageInfo.of(shares);
+        PageInfo<Share> of = new PageInfo<>(shares);
         return ResultDTO.builder()
-                .data(pageInfo)
+                .data(of)
                 .status(HttpStatus.OK.value())
                 .build();
     }
