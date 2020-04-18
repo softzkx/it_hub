@@ -1,15 +1,21 @@
 package com.qf.ithub.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.qf.ithub.common.aspect.annotation.CheckLogin;
 import com.qf.ithub.common.dto.LoginByPhoneReqDTO;
 import com.qf.ithub.common.dto.ResultDTO;
 import com.qf.ithub.common.exception.AppException;
+import com.qf.ithub.entity.User;
 import com.qf.ithub.service.MessageService;
 import com.qf.ithub.service.MidUserShareService;
 import com.qf.ithub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -88,5 +94,64 @@ public class UserController {
         return midUserShareService.getMidUserShare(userid,shareid);
     }
 
+    /**
+     *  获得用户列表指定页码
+     */
+    @GetMapping("/list")
+    public ResultDTO getUserInfo(
+            @RequestParam(name = "phone",required = false) String phone,
+            @RequestParam(name = "roleid",required = false) Integer roleid,
+            @RequestParam(name = "isvip",required = false) Boolean isvip,
+            @RequestParam(name = "pageno",defaultValue = "1") Integer pageno,
+            @RequestParam(name = "pagesize",defaultValue = "10") Integer pagesize){
+        return userService.getUserInfo(phone,roleid,isvip,pageno,pagesize);
+    }
+
+    /**
+     *  更新指定用户的角色
+     */
+    @PutMapping("/updrole")
+    public ResultDTO updroleByUserid(Integer userid , Integer roleid, String rolename) {
+        return userService.updroleByUserid(userid,roleid,rolename);
+    }
+
+    /**
+     *  获得用户的信息
+     */
+    @GetMapping("/userinfo")
+    @CheckLogin
+    public ResultDTO getUserinfo(HttpServletRequest request){
+        Integer userid = (Integer) request.getAttribute("userid");
+        return userService.getUserinfo(userid);
+    }
+
+    /**
+     *  根据用户名查询用户的信息
+     */
+    @GetMapping("/userinfobyname")
+    @CheckLogin
+    public ResultDTO getUserInfoByName(@RequestParam("userName") String userName,
+                                       @RequestParam("id") Integer id){
+        return userService.getUserInfoByName(userName,id);
+    }
+
+    /**
+     *  更新用户信息
+     */
+    @PutMapping("/update")
+    @CheckLogin
+    public ResultDTO updateUser(@RequestBody  User user){
+        System.out.println(user);
+       return userService.updateUser(user);
+
+    }
+
+    /**
+     *  用户名和密码登陆
+     */
+    @PostMapping("/login1")
+    public ResultDTO loginByUserName(@RequestBody User user){
+        return userService.loginByUserName(user);
+    }
 
 }

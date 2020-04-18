@@ -1,4 +1,4 @@
-package com.qf.ithub.entity;
+package com.qf.ithub.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -6,20 +6,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Date;
-import javax.persistence.*;
+import java.util.List;
 
+/**
+ * Copyright (C), 2017-2020, 扩新工作室
+ * Author: zoukx
+ * Date: 2020/4/1 19:56
+ * FileName: EditSharesDTO
+ * Description: ${DESCRIPTION}
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "share")
-public class Share {
+public class EditSharesDTO {
+
+    private List<ImgDTO> imageList;
     /**
      * id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     /**
@@ -75,7 +84,7 @@ public class Share {
     private String downloadUrl;
 
     /**
-     * 下载数 
+     * 下载数
      */
     @Column(name = "buy_count")
     private Integer buyCount;
@@ -112,6 +121,4 @@ public class Share {
      * 概要信息
      */
     private String summary;
-
-
 }

@@ -84,6 +84,7 @@ public class AuthAspect {
             Claims claimsFromToken = jwtOperatorHS256.getClaimsFromToken(token);
             request.setAttribute("userid",claimsFromToken.get("userid"));
             request.setAttribute("role",claimsFromToken.get("role"));
+            request.setAttribute("roleid",claimsFromToken.get("roleid"));
             request.setAttribute("wxid",claimsFromToken.get("wxid"));
 
         } catch (Throwable throwable) {

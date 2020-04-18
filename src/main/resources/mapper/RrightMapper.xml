@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.ithub.mapper.RrightMapper">
+  <resultMap id="BaseResultMap" type="com.qf.ithub.entity.Rright">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="rightid" jdbcType="INTEGER" property="rightid" />
+    <result column="righttext" jdbcType="VARCHAR" property="righttext" />
+    <result column="righttype" jdbcType="INTEGER" property="righttype" />
+    <result column="righturl" jdbcType="VARCHAR" property="righturl" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="is_menu" jdbcType="BIT" property="isMenu" />
+  </resultMap>
+  <resultMap id="map01" type="com.qf.ithub.common.dto.RightDTO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="rightid" jdbcType="INTEGER" property="rightid" />
+    <result column="righttext" jdbcType="VARCHAR" property="righttext" />
+    <result column="righttype" jdbcType="INTEGER" property="righttype" />
+    <result column="righturl" jdbcType="VARCHAR" property="righturl" />
+    <result column="parentid" jdbcType="INTEGER" property="parentid" />
+    <result column="is_menu" jdbcType="BIT" property="isMenu" />
+  </resultMap>
+
+  <select id="getMenuRightsByRoleidAndParatentid" parameterType="map" resultMap="map01">
+    select b.* from role_right a
+    left join rright b
+    on a.rightid=b.rightid
+    where b.parentid=#{parentid}
+    and is_menu=1
+    and a.roleid=#{roleid}
+  </select>
+  <select id="getAllRightsByParatentid" parameterType="map" resultMap="map01">
+    select b.* from rright b
+    where b.parentid=#{parentid}
+    and is_menu=1
+  </select>
+</mapper>

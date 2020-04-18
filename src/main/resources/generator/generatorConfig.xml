@@ -33,7 +33,25 @@
                              targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table catalog="${catalog.name}" tableName="tb_order">
+        <table catalog="${catalog.name}" tableName="user">
+            <!-- 默认为 false，如果设置为 true，在生成的 SQL 中，table 名字不会加上 catalog 或 schema -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <!-- mysql 配置 -->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        </table>
+        <table catalog="${catalog.name}" tableName="role">
+            <!-- 默认为 false，如果设置为 true，在生成的 SQL 中，table 名字不会加上 catalog 或 schema -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <!-- mysql 配置 -->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        </table>
+        <table catalog="${catalog.name}" tableName="role_right">
+            <!-- 默认为 false，如果设置为 true，在生成的 SQL 中，table 名字不会加上 catalog 或 schema -->
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <!-- mysql 配置 -->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        </table>
+        <table catalog="${catalog.name}" tableName="rright">
             <!-- 默认为 false，如果设置为 true，在生成的 SQL 中，table 名字不会加上 catalog 或 schema -->
             <property name="ignoreQualifiersAtRuntime" value="true"/>
             <!-- mysql 配置 -->

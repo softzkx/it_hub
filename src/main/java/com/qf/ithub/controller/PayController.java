@@ -34,14 +34,19 @@ public class PayController {
      */
     @GetMapping("/create")
     // @CheckLogin
-    public void create(Long orderid, Long phone,HttpServletResponse response) {
+    @ResponseBody
+    public ResultDTO create(Long orderid, Long phone,HttpServletResponse response) {
         System.out.println(orderid + ":" + phone);
         String form = payService.create(orderid,phone);
-        response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
+        // response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
         try {
-            response.getWriter().write(form);//直接将完整的表单html输出到页面
-            response.getWriter().flush();
-            response.getWriter().close();
+//            response.getWriter().write(form);//直接将完整的表单html输出到页面
+//            response.getWriter().flush();
+//            response.getWriter().close();
+            return ResultDTO.builder()
+                    .data(form)
+                    .status(HttpStatus.OK.value())
+                    .build();
         }catch (Exception ex){
             throw AppException.builder()
                     .status(HttpStatus.BAD_GATEWAY.value())

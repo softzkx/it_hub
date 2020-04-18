@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/it_hub?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://ithub_mysql:3306/it_hub?useUnicode=true&characterEncoding=utf-8&useSSL=false
     password: root
     username: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -13,7 +13,7 @@ spring:
   thymeleaf:
     cache: true
   redis:
-    host: 192.168.25.146
+    host: ithub_redis
     port: 6379
 jwt:
   secret: "ashdjakhsdhaslkdhalsjdlasjdlaksjdlkasjdlasjdlkasdjlasjdaslkdjasl"
@@ -29,8 +29,8 @@ server:
 oss:
   endpoint: oss-cn-beijing.aliyuncs.com
   url: http://zoukxoss01.oss-cn-beijing.aliyuncs.com/
-  accessKeyId: LTAI4FmVd9pcvLSBhafXsrUv
-  accessKeySecret: 0i1cQpdrQvNSmk6Ou5cqWMT3TAz25z
+  accessKeyId: LTAI4FfcBHNZzgMVCnmsT7bh
+  accessKeySecret:  Bmd4m2lsoeiAu1CEAgNmyjit1HdILD
   bucketName: zoukxoss01
 
 logging:

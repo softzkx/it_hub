@@ -45,15 +45,15 @@ public class PayService {
         // 商户订单号，商户网站订单系统中唯一订单号，必填
         String out_trade_no = orderid+"";
         // 订单名称，必填
-        String subject = phone + " 充值vip";
+        String subject = "vip";
         // 付款金额，必填
         String total_amount = "0.01";
         // 商品描述，可空
         //String body = new String(request.getParameter("WIDbody").getBytes("ISO-8859-1"),"UTF-8");
         // 超时时间 可空
-        String timeout_express = "2m";
+        String timeout_express = "20m";
         // 销售产品码 必填
-        String product_code = "QUICK_WAP_WAY";
+        String product_code = "QUICK_MSECURITY_PAY";
         /**********************/
         // SDK 公共请求类，包含公共请求参数，以及封装了签名与验签，开发者无需关注签名与验签
         //调用RSA签名方式

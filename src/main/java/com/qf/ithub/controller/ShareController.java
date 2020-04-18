@@ -1,12 +1,17 @@
 package com.qf.ithub.controller;
 
 import com.qf.ithub.common.aspect.annotation.CheckLogin;
+import com.qf.ithub.common.aspect.annotation.CheckRight;
+import com.qf.ithub.common.dto.EditSharesDTO;
+import com.qf.ithub.common.dto.ImgDTO;
 import com.qf.ithub.common.dto.ResultDTO;
+import com.qf.ithub.entity.Share;
 import com.qf.ithub.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Copyright (C), 2017-2020, 扩新工作室
@@ -92,13 +97,72 @@ public class ShareController {
     @CheckLogin
     public ResultDTO getSharesbyType(HttpServletRequest request,
                                     @RequestParam("isexchange") Boolean isExchange,
-                                     @RequestParam(name="pageno",defaultValue = "1")Integer pageno){
+                                     @RequestParam(name="pageno",defaultValue = "1") Integer pageno,
+                                     @RequestParam(name="pagesize",defaultValue = "10") Integer pagesize){
         Integer userid = (Integer) request.getAttribute("userid");
         if(isExchange){
             // 返回我兑换过的资源集合
-            return  shareService.getExchangeShares(userid,pageno);
+            return  shareService.getExchangeShares(userid,pageno,pagesize);
         }
         // 返回我up 的资源
-        return  shareService.getUpShares(userid,pageno);
+        return  shareService.getUpShares(userid,pageno,pagesize);
     }
+
+    /**
+     *  更新shares
+     */
+    @PutMapping("/updateshares")
+    public ResultDTO updateShares(
+            @RequestBody EditSharesDTO editSharesDTO
+            ){
+        System.out.println(editSharesDTO);
+
+        return shareService.updateShares(editSharesDTO);
+
+    }
+
+    /**
+     *  添加shares
+     */
+    @PostMapping("/addshares")
+    public ResultDTO addShares(
+            @RequestBody EditSharesDTO editSharesDTO
+    ){
+        System.out.println(editSharesDTO);
+
+        return shareService.addShares(editSharesDTO);
+
+    }
+
+    /**
+     * 获得所有未审核的资源
+     */
+    @GetMapping("/notyets")
+    @CheckRight("admin")
+    public ResultDTO getNotYetShares(
+            @RequestParam(name="pageno",defaultValue = "1") Integer pageno,
+            @RequestParam(name="pagesize",defaultValue = "10") Integer pagesize){
+            return shareService.getNotYetShares(pageno,pagesize);
+    }
+
+    /**
+     *  审核指定的资源
+     */
+    @PutMapping("/aduit")
+    @CheckRight("admin")
+    public ResultDTO aduitShares(
+            @RequestBody Share share){
+        System.out.println(share);
+        return shareService.aduitShares(share);
+    }
+
+    /**
+     *  获得首页全局报表的数据
+     */
+    @GetMapping("/chart/all")
+    public ResultDTO getChartsAll(
+            ){
+        return shareService.getChartsAll();
+    }
+
 }

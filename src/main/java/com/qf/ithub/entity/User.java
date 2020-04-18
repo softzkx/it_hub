@@ -8,17 +8,16 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import javax.persistence.*;
 
+@Table(name = "user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "user")
 public class User {
     /**
      * Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     private Long phone;
@@ -34,6 +33,8 @@ public class User {
      */
     @Column(name = "wx_nickname")
     private String wxNickname;
+
+    private Integer roleid;
 
     /**
      * 角色
@@ -64,6 +65,12 @@ public class User {
     private Integer bonus;
 
     private Boolean isvip;
+
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "user_password")
+    private String userPassword;
 
 
 }

@@ -30,4 +30,11 @@
     select * from mid_user_share a left join share b on b.id=a.share_id
     where a.user_id=#{userid}
   </select>
+
+  <select id="getChartAllDTO" resultType="com.qf.ithub.common.dto.ChartAllDTO">
+    select a.id,a.name,count(b.id) as count from share_category a
+    left join `share` b
+    on a.id=b.catid
+    group by a.id
+  </select>
 </mapper>

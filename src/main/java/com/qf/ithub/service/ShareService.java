@@ -2,10 +2,14 @@ package com.qf.ithub.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.qf.ithub.common.dto.ChartAllDTO;
+import com.qf.ithub.common.dto.EditSharesDTO;
+import com.qf.ithub.common.dto.ImgDTO;
 import com.qf.ithub.common.dto.ResultDTO;
 import com.qf.ithub.common.exception.AppException;
 import com.qf.ithub.entity.*;
 import com.qf.ithub.mapper.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
@@ -13,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
 
 /**
  * Copyright (C), 2017-2020, 扩新工作室
@@ -209,8 +213,8 @@ public class ShareService {
     /**
      * 获得指定用户兑换过的资源
      */
-    public ResultDTO getExchangeShares(Integer userid, Integer pageno){
-        PageHelper.startPage(pageno,10);
+    public ResultDTO getExchangeShares(Integer userid, Integer pageno,Integer pagesize){
+        PageHelper.startPage(pageno,pagesize);
         List<Share> exchangeShares = shareMapper.getExchangeShares(userid);
         PageInfo<Share> of = new PageInfo<>(exchangeShares);
         return ResultDTO.builder()
@@ -222,18 +226,174 @@ public class ShareService {
     /**
      * 获得指定用户贡献的资源
      */
-    public ResultDTO getUpShares(Integer userid, Integer pageno) {
+    public ResultDTO getUpShares(Integer userid, Integer pageno,Integer pagesize) {
 
-        PageHelper.startPage(pageno,10);
+        PageHelper.startPage(pageno,pagesize);
         Example example = new Example(Share.class);
-        example.createCriteria().andEqualTo("userId",userid)
-                .andEqualTo("auditStatus","PASS");
+//        example.createCriteria().andEqualTo("userId",userid)
+//                .andEqualTo("auditStatus","PASS");
+        example.createCriteria().andEqualTo("userId",userid);
         example.setOrderByClause("update_time desc");
         List<Share> shares = shareMapper.selectByExample(example);
         PageInfo<Share> of = new PageInfo<>(shares);
         return ResultDTO.builder()
                 .data(of)
                 .status(HttpStatus.OK.value())
+                .build();
+    }
+
+    /**
+     * 更新shares
+     * @param editSharesDTO
+     * @return
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultDTO updateShares(EditSharesDTO editSharesDTO) {
+
+        // 1 更新信息
+        Share share = Share.builder().build();
+        BeanUtils.copyProperties(editSharesDTO,share);
+        share.setUpdateTime(new Date());
+        int count = shareMapper.updateByPrimaryKeySelective(share);
+        if (count != 1) {
+            throw AppException.builder()
+                    .status(HttpStatus.BAD_GATEWAY.value())
+                    .message("更新分享信息失败...")
+                    .build();
+        }
+        // 2 删除图片
+        Example example = new Example(ShareImages.class);
+        example.createCriteria().andEqualTo("shareid",editSharesDTO.getId());
+        shareImagesMapper.deleteByExample(example);
+        // 3 添加图片
+        for (ImgDTO imgDTO : editSharesDTO.getImageList()) {
+            ShareImages shareImage = ShareImages.builder()
+                    .shareid(editSharesDTO.getId())
+                    .image(imgDTO.getUrl()).build();
+            count = shareImagesMapper.insertSelective(shareImage);
+            if (count != 1) {
+                throw AppException.builder()
+                        .status(HttpStatus.BAD_GATEWAY.value())
+                        .message("添加图片失败...")
+                        .build();
+            }
+        }
+
+        return ResultDTO.builder()
+                .status(HttpStatus.OK.value()).build();
+    }
+
+    /**
+     * 添加shares
+     * @param editSharesDTO
+     * @return
+     */
+    @Transactional(rollbackFor=Exception.class)
+    public ResultDTO addShares(EditSharesDTO editSharesDTO) {
+        // 1 添加信息
+        Share share = Share.builder().build();
+        BeanUtils.copyProperties(editSharesDTO,share);
+        share.setBuyCount(0);
+        share.setAuditStatus("NOT_YET");
+        share.setCreateTime(new Date());
+        share.setUpdateTime(new Date());
+        int count = shareMapper.insertSelective(share);
+        if(count!=1){
+            throw AppException.builder()
+                    .status(HttpStatus.BAD_GATEWAY.value())
+                    .message("添加分享信息失败...")
+                    .build();
+        }
+        // 2 添加图片
+        for (ImgDTO imgDTO : editSharesDTO.getImageList()) {
+            ShareImages shareImage = ShareImages.builder()
+                    .shareid(share.getId())
+                    .image(imgDTO.getUrl()).build();
+            count = shareImagesMapper.insertSelective(shareImage);
+            if (count != 1) {
+                throw AppException.builder()
+                        .status(HttpStatus.BAD_GATEWAY.value())
+                        .message("添加图片失败...")
+                        .build();
+            }
+        }
+
+        return ResultDTO.builder()
+                .status(HttpStatus.OK.value()).build();
+    }
+
+    /**
+     * 获得所有未审核的资源
+     */
+    public ResultDTO getNotYetShares(Integer pageno , Integer pageSize){
+        PageHelper.startPage(pageno,pageSize);
+        Example example = new Example(Share.class);
+        example.createCriteria().andEqualTo("auditStatus","NOT_YET");
+        example.setOrderByClause("update_time desc");
+        List<Share> shares = shareMapper.selectByExample(example);
+        PageInfo<Share> pageInfo = new PageInfo<>(shares);
+        return ResultDTO.builder()
+                .message("")
+                .status(200)
+                .data(pageInfo).build();
+    }
+
+    /**
+     *  审核指定的资源
+     */
+    public ResultDTO aduitShares(Share share) {
+        // 1 更新状态 和 原因
+        int count = shareMapper.updateByPrimaryKeySelective(share);
+        if (count != 1) {
+            throw AppException.builder()
+                    .status(700)
+                    .message("审核资源失败.")
+                    .build();
+        }
+        // 2 如果是通过了 要给用户加分
+        Integer userId = share.getUserId();
+        // 2.1 获得用户
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null) {
+            throw AppException.builder()
+                    .status(700)
+                    .message("用户不存在")
+                    .build();
+        }
+        user.setBonus(user.getBonus()+share.getPrice());
+        count = userMapper.updateByPrimaryKeySelective(user);
+        if (user == null) {
+            throw AppException.builder()
+                    .status(700)
+                    .message("更新用户积分失败")
+                    .build();
+        }
+
+        return ResultDTO.builder().status(200).message("审核完成。。").build();
+    }
+
+    /**
+     *  获得首页全局报表的数据
+     */
+    public ResultDTO getChartsAll() {
+        List<ChartAllDTO> chartAllDTO = shareMapper.getChartAllDTO();
+        // 1 x 抽的数组
+        List<String> x = new ArrayList<>();
+        // 2 1y 抽的数组
+        List<Integer> y = new ArrayList<>();
+
+        for (ChartAllDTO cd : chartAllDTO) {
+            x.add(cd.getName());
+            y.add(cd.getCount());
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("x",x);
+        map.put("y",y);
+
+        return ResultDTO.builder()
+                .message("")
+                .status(200)
+                .data(map)
                 .build();
     }
 }

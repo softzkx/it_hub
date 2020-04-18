@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "share_images")
+@Table(name = "role")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShareImages {
+public class Role {
     @Id
-    private Integer id;
+    private Integer roleid;
 
-    private String image;
-
-    private Integer shareid;
+    private String rolename;
 
 
 }
